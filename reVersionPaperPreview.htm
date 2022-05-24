@@ -1,0 +1,2663 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<link rel="stylesheet" type="text/css" href="reVersionPaperPreview_files/teacherHeader.css">
+<link href="reVersionPaperPreview_files/moocLeft.css" type="text/css" rel="stylesheet">    <link href="reVersionPaperPreview_files/cssnew.css" type="text/css" rel="stylesheet">
+<link href="reVersionPaperPreview_files/CeYanNew.css" type="text/css" rel="stylesheet">
+<link href="reVersionPaperPreview_files/connLine.css" rel="stylesheet" type="text/css">
+<link href="reVersionPaperPreview_files/msg-note-tpl.htm" rel="stylesheet" type="text/css">
+<link href="reVersionPaperPreview_files/questionBankUsual.css" type="text/css" rel="stylesheet"><style>
+	.title{background:  ;padding:3px 0;width:120px;}
+	.Cy_TItle p {display: block;}
+</style>
+<script src="reVersionPaperPreview_files/jquery.js"></script>
+<script type="text/javascript" src="reVersionPaperPreview_files/json2.js"></script>
+<script src="reVersionPaperPreview_files/right3.js"></script>
+<link href="reVersionPaperPreview_files/viewer.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="reVersionPaperPreview_files/jquery_002.js"></script>
+<script type="text/javascript" src="reVersionPaperPreview_files/viewer-jquery.js"></script>
+<script type="text/javascript">
+try{
+	$(function(){
+		var imgList = $(".TiMu").find("div img:not(.workAttach img, .attach img, .attachNew img, .stuAnswerArea img, .popClose img, .ans-formula-moudle)");
+		for (var i = 0, len = imgList.size(); i < len; i++) {
+			 var src = imgList.eq(i).attr("src");
+			 if(src){
+    			var index = src.indexOf("375_1024");
+    			if (index != -1) {
+    				src = src.replace("375_1024", "origin");
+    			}
+                 var index2 = src.indexOf("750_1024");
+                 if (index2 != -1) {
+                     src = src.replace("750_1024", "origin");
+                 }
+    			imgList.eq(i).attr("data-original", src);
+		   }
+		}
+        $(".TiMu").find("div img:not(.workAttach img, .attach img, .attachNew img, .stuAnswerArea img, .popClose img)").viewer({
+			url : 'data-original',
+		});
+	})
+  }catch(error){}
+</script><script type="text/javascript">window.SUPPORT_AUDIO_SETTING = true; window.SUPPORT_AUDIO_CONTROL = true; window.Forbid_Attachment_Title = '0';</script>
+<script type="text/javascript">
+$(document).keydown(function(event){  
+       if ((event.altKey)&&   
+          ((event.keyCode==37)||   //屏蔽 Alt+ 方向键 ←   
+           (event.keyCode==39)))   //屏蔽 Alt+ 方向键 →   
+       {   
+           event.returnValue=false;   
+           return false;  
+       }
+        //if(event.keyCode==8){  
+            //return false; //屏蔽退格删除键    
+        //}  
+        if(event.keyCode==116){
+            return false; //屏蔽F5刷新键   
+        }  
+        if((event.ctrlKey) && (event.keyCode==82)){  
+            return false; //屏蔽alt+R   
+        }  
+});  
+
+    //倒计时
+	var maxSecond = 119;
+	maxtime = 3229;//服务器计算的考试的剩余时间
+	var limitTime = 110 * 60;//考试限制时间
+	// var passingStandard = ;
+	var testPaperStatus = "1";
+	
+	/*
+	if(passingStandard > 0 && parseInt(testPaperStatus) == 3) {
+		maxtime = limitTime;
+	}
+	*/
+	
+	if(maxtime > 0) {
+		timers = setInterval("CountDown()",1000);
+        function CountDown(){  
+             if(maxtime>0){  
+                 minutes = Math.floor(maxtime/60);
+    			 if(minutes < 10) {
+    			 	minutes = "0" + minutes;
+    			 }
+                 seconds = Math.floor(maxtime%60);
+    			  if(seconds < 10) {
+    			 	seconds = "0" + seconds;
+    			 }
+                 msg = minutes +"' "+seconds+"''";  
+				 $("#timer").html( msg);
+    			 $("#remainTime").val(maxtime);
+                 --maxtime;  
+             } else{  
+				 $("#timeOver").val(true);
+				 clearInterval(timers);
+    			 //时间到，自动交卷
+				 //submitForm(false,false);
+				  timeOverSubmitTest();
+             }  
+        }
+	}
+	//var timers2 = setInterval("",60000); //1分钟保存一次
+	
+	$(function(){
+	$(".DtButton02").toggle(function(){
+		$(this).prev().show();
+	},function(){
+		$(this).prev().hide();
+	})
+})
+</script>
+<script language="javascript" src="reVersionPaperPreview_files/enc_js_exam.js"></script>
+<script language="javascript" src="reVersionPaperPreview_files/testPaperNew.js"></script>
+<script src="reVersionPaperPreview_files/wayer_v1.js"></script>
+
+
+
+
+</head>
+<body onselectstart="return false">
+	
+	  <div style="height:60px;width:1000px;background:#fff;margin:0 auto;"></div>
+	<!----左侧答题卡开始--->
+
+<input type="hidden" id="submitLimitTime" name="submitLimitTime" value="30">
+<input type="hidden" id="limitTime" name="limitTime" value="110">
+<input type="hidden" id="wordNum" name="wordNum" value="0">
+<input type="hidden" id="qbanksystem" name="qbanksystem" value="0">
+<input type="hidden" id="qbankbackurl" name="qbankbackurl" value="">
+<input type="hidden" id="switchScreenControl" name="switchScreenControl" value="0">
+<input type="hidden" id="snapshotMonitor" name="snapshotMonitor" value="0">
+<input type="hidden" id="monitorEnc" name="monitorEnc" value="ae736863147f792fea37b080a8c607a4">
+<input type="hidden" id="pcclientSwitchout" name="pcclientSwitchout" value="0">
+<input type="hidden" id="allowDownloadAttachment" value="1">
+
+<div class="wid920" style="position:relative">
+	<div class="CyTop">
+        <ul class="ul01">
+            <li class="cur"><a href="javascript:void(0)">20级《人机交互工程》模拟试卷</a><b></b></li>
+        </ul>
+    </div>  
+    <div class="CyTop" style="margin-bottom:15px;font-size:14px">
+		        <span>题量：<span class=""> 41 </span></span>
+		&nbsp;&nbsp;<span>满分：<span class="">100.0</span></span>&nbsp;&nbsp;
+		<span>截止日期：<span class="">2022-05-25 06:50</span></span>
+		<div class="fontRed" style="font-size:16px;display:inline;padding-left:24px;" id="timer">53' 46''</div>
+    </div>
+	<div class="clearfix">
+			</div>
+	<div class="leftDtika" id="ZyBottom">
+			<form id="submitTest" action="/exam/test/reVersionSubmitTestNew?classId=52989215&amp;courseId=216833003&amp;testPaperId=2131281&amp;testUserRelationId=60585684" method="post">
+            <input type="hidden" id="courseId" name="courseId" value="216833003">
+			<input type="hidden" id="paperId" name="paperId" value="">
+			<input type="hidden" id="testPaperId" name="testPaperId" value="2131281">
+			<input type="hidden" id="testUserRelationId" name="testUserRelationId" value="60585684">
+			<input type="hidden" id="tId" name="tId" value="2131281">
+			<input type="hidden" id="subCount" name="subCount" value="">
+			<input type="hidden" id="remainTime" name="remainTime" value="3226">
+			<input type="hidden" id="encRemainTime" name="encRemainTime" value="5339">
+			<input type="hidden" id="encLastUpdateTime" name="encLastUpdateTime" value="1653381587327">
+			<input type="hidden" id="tempSave" name="tempSave" value="false">
+			<input type="hidden" id="timeOver" name="timeOver" value="false">
+			<input type="hidden" id="type" name="type" value="0">
+			<input type="hidden" id="classId" name="classId" value="52989215">
+			<input type="hidden" id="enc" name="enc" value="1d3a6fce74fd6350c1422a6636b107c0">
+			<input type="hidden" id="examsystem" name="examsystem" value="0">
+			<input type="hidden" id="userId" name="userId" value="150186360">
+			<input type="hidden" id="cpi" name="cpi" value="151066331">
+			<input type="hidden" id="openc" name="openc" value="8550fb279d95904bc382b4179a261f9b">
+            </form>
+							
+				
+			     														<!--单选题开始-->
+																					 <br>
+                            <div style="font-size:12pt" class="title"> 一、单选题</div>
+																																																																																																																						<br>
+																 							
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568641">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">1</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=0&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>在人机界面设计时，下列哪两种颜色得搭配比较适合阅读？</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			    
+																		<ul class="Cy_ulTop">
+										   
+                                                                                        
+                                                                                           <li>
+												<i class="fl">A、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>红色背景和蓝色文字</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">B、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>紫色背景和黄色文字<br></p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">C、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>绿色背景和洋红文字</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                            											   <li>
+												<i class="fl">D、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>黄色背景和蓝色文字<br></p></a>
+                    							</div>
+											   </li>                                                                                                                         </ul>
+										
+                                    <div class="Py_answer clearfix">
+																				<span>
+																								我的答案：D
+										</span>
+										                                    </div>
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568642">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">2</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=1&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp;
+ &nbsp; &nbsp; 
+&nbsp;在购物网站的页面布局时，若有两种形状和颜色都相似，但却不属于同一类物品。运用格式塔心理学，依据下列（&nbsp; &nbsp; 
+&nbsp;）原则，进行适当的设计页面，可以让用户看得出它们的确不是同一类物品。</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			    
+																		<ul class="Cy_ulTop">
+										   
+                                                                                        
+                                                                                           <li>
+												<i class="fl">A、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>接近性</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">B、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>相似性</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">C、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>连续性</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                            											   <li>
+												<i class="fl">D、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>完整和闭合性</p></a>
+                    							</div>
+											   </li>                                                                                                                         </ul>
+										
+                                    <div class="Py_answer clearfix">
+																				<span>
+																								我的答案：D
+										</span>
+										                                    </div>
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568643">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">3</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=2&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp;
+ &nbsp; &nbsp; 
+&nbsp;在购物网站的页面布局时，若想把同款式，但型号不同（比如形状和颜都相同，但尺码不同的上衣）的物品区分开来展示，运用格式塔心理学，依据下
+列（&nbsp; &nbsp; &nbsp;）原则，进行适当的设计页面，可以让用户看起来它们虽是一类物品，但却有区别。</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			    
+																		<ul class="Cy_ulTop">
+										   
+                                                                                        
+                                                                                           <li>
+												<i class="fl">A、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>接近性</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">B、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>相似性</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                            											   <li>
+												<i class="fl">C、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>对称性</p></a>
+                    							</div>
+											   </li>                                                                                        
+                                                                                        
+                                                                                           <li>
+												<i class="fl">D、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>完整和闭合性</p></a>
+                    							</div>
+											   </li>                                                                                                                        </ul>
+										
+                                    <div class="Py_answer clearfix">
+																				<span>
+																								我的答案：C
+										</span>
+										                                    </div>
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568644">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">4</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=3&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>用户可接受的等待计算机响应的时间是多少？首先取决于（&nbsp; &nbsp; &nbsp; &nbsp; ）。</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			    
+																		<ul class="Cy_ulTop">
+										   
+                                                                                        
+                                                                                           <li>
+												<i class="fl">A、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>用户的个性</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">B、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>任务的复杂性<br></p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">C、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>用户对任务的熟练程度<br></p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                            											   <li>
+												<i class="fl">D、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>以前的使用经验</p></a>
+                    							</div>
+											   </li>                                                                                                                         </ul>
+										
+                                    <div class="Py_answer clearfix">
+																				<span>
+																								我的答案：D
+										</span>
+										                                    </div>
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568645">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">5</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=4&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>数一数，这条大象有几条腿？</p>
+<p style="text-align:center"><img src="reVersionPaperPreview_files/0e19a15b42f42923503155c25e6d3d83.png" alt="图片2.png" data-original="https://p.ananas.chaoxing.com/star3/origin/0e19a15b42f42923503155c25e6d3d83.png"></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			    
+																		<ul class="Cy_ulTop">
+										   
+                                                                                        
+                                                                                           <li>
+												<i class="fl">A、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>4条</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">B、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>5条</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                                                                           <li>
+												<i class="fl">C、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>6条</p></a>
+                    							</div>
+											   </li>                                                                                       
+                                                                                        
+                                            											   <li>
+												<i class="fl">D、</i>
+												<div class="clearfix">
+                    								<a href="javascript:void(0);" style="cursor:default"><p>数不清</p></a>
+                    							</div>
+											   </li>                                                                                                                         </ul>
+										
+                                    <div class="Py_answer clearfix">
+																				<span>
+																								我的答案：D
+										</span>
+										                                    </div>
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					 <br>
+                            <div style="font-size:12pt" class="title"> 二、填空题</div>
+																																																																																																																						<br>
+																 							
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568646">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">1</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=5&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>谨慎地使用颜色，颜色编码能够引起喜悦、（&nbsp; &nbsp; &nbsp; &nbsp;）、恐惧或愤怒的情感反应。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>兴奋</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568647">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">2</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=6&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>商业性设计的本质是形式主义，它在设计中强调形式第一，（&nbsp; &nbsp; &nbsp;）第二。设计师为了促销商品，增加经济效益，不断翻新花样，以流行的时尚来博得消费者的青睐。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>功能</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568648">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">3</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=7&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style="font-family: 宋体;font-size: 14px"><span style="font-family:宋体">在设计过程的前期，用户界面架构师应该产生一套工作指南</span><span style="font-family:宋体">，就是前期的可读指南文档，它提供了让很多应用开发人员遵循的一组清晰的（&nbsp; &nbsp;），因而确保了跨产品设计的和谐性。</span></span></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>原则</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568649">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">4</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=8&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>新艺术运动承认机械生产的必要性，但是由于他们刻意追求曲线美和（&nbsp; &nbsp; ）美，使这一运动的发展结果趋向形式化，而没有把艺术因素的外在形式与事物的内在属性相统一，导致产品的功能与形式相矛盾。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>装饰</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568650">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">5</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=9&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体"></span></span></p>
+<p>短时记忆的能力相当有限，保持的时间也较短，因此，为了保证短时记忆的作业效能，一方面不能超过信息容量，例如电话号码、商标字母最好不超过7个数字或字母；另一方面，作业者要十分熟悉自己的（&nbsp; &nbsp; ）或信息编码。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>工作内容</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568651">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">6</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=10&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp; &nbsp; &nbsp;设计者的目标首先是防止错误发生；其次是一旦发生了错误要设法（&nbsp; &nbsp; &nbsp; ）错误，恢复系统。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>改正</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568652">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">7</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=11&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>常用的5种交互风格是：直接操纵、（&nbsp; &nbsp; &nbsp; ）、表格填充、命令语言和自然语言。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>菜单选择</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568653">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">8</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=12&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>很多设计指南建议限制单个显示中的颜色数为4种，整个显示序列中的颜色限定为（&nbsp; &nbsp; &nbsp; &nbsp;）种。</p>
+<p><br style="white-space: normal;"></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>4</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568654">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">9</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=13&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体">增强现实让用户待在（&nbsp; &nbsp; ）环境中，但添加了透明覆盖物，其上有建筑物的名称或者隐藏对象的可视化等信息。</span></span></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>正常;真实</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568655">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">10</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=14&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp; &nbsp; &nbsp; &nbsp;使用彩色来帮助格式化。在空间紧缺、排列密集的显示中，通过类似的颜色能够用于给相关项分组。不同的颜色能够被用来区别物理上接近但（&nbsp; &nbsp; &nbsp; &nbsp;）上不同的域。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>逻辑</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568656">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">11</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=15&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>短时记忆是一种特殊形式的记忆，也叫“工作记忆”。短时记忆的能力相当有限，保持的时间也较短，一般为（&nbsp; &nbsp; &nbsp;）秒左右。</p>
+<p><span style="font-family: 宋体; font-size: 14px;"></span><br></p>
+<p><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体"></span></span><br></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>30</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568657">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">12</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=16&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>很多设计指南建议限制单个显示中的颜色数为（&nbsp; &nbsp; &nbsp; &nbsp;）种，整个显示序列中的颜色限定为7种。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>4</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568658">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">13</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=17&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp; &nbsp; &nbsp; &nbsp;输入可以分为控制输入和数据输入两类。控制输入完成系统运行的控制功能，如执行命令、菜单选择、操作复原等；数据输入则是提供计算机系统运行时所需的（&nbsp; &nbsp; &nbsp; ）。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>数据</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568659">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">14</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=18&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>日本的GK设计公司把表达“（&nbsp; &nbsp; &nbsp;）”作为设计的目标，认为设计是一种把人们的思想赋予形态的工作，是将所有的人造物赋予美好的目的并加以实现，优秀的设计是真善美的体现。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>真善美</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568660">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">15</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=19&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>回顾人类发展的文明史，早在古代，人类就已经在器物上进行艺术造型活动，进行美的创造。在许多石器、陶瓷器、青铜器、铁器器物上都可看到独特的造型形式和多种精美的饰纹。但是，真正意义上的硬件界面设计，是从（&nbsp; &nbsp; &nbsp;）开始的。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>工业革命</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568661">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">16</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=20&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp; &nbsp; &nbsp; &nbsp;视觉布局对（人类）执行具有很大影响，是网页设计的关键因素。网页设计中4个视觉布局因素分别是：（&nbsp; &nbsp;）数量、对齐、编组指示和密度。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>链接</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568662">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">17</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=21&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体">计算机系统由计算机硬件、计算机软件和人所共同构成，人与硬件、软件的结合构成了（&nbsp; &nbsp; &nbsp;）。</span></span></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>人机界面</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568663">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">18</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=22&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp;
+ &nbsp; &nbsp; 
+用户通常在解决特定问题时想获得帮助，而不是按顺序通读一套在线文档，他们通常想要直接跳到所需的信息。此时，提供上下文相关的信息具有强大的优势。这一
+技术的通用版本中，用户只需把光标移动到需要的位置，就能导致一个小的弹出框，通常称为工具提示、屏幕提示或（&nbsp; &nbsp; 
+）出现，其上有该对象的解释。</p>
+<p><br style="white-space: normal;"></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>气球帮助</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568664">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">19</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=23&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>直接操纵的对象是命令、数据或者对数据的某种操作，直接操纵的工具是屏幕坐标（&nbsp; &nbsp; &nbsp;）设备。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>命令</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568665">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">20</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=24&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p style="text-indent: 28px"><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体">大多数的窗口系统都综合了直接和间接操纵。菜单可以通过指向菜单图标并进行选择（&nbsp; &nbsp; &nbsp;）来访问。而菜单本身，是一些操作的名称列表,当列表上的某个操作通过键盘选择之后<span style="font-family: 宋体; font-size: 14px; text-indent: 28px;">（间接操纵）</span>，系统便开始执行相应的命令。</span></span></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									                                    <div class="Py_tk">
+                                        <p class="font14">我的答案:</p>
+                                        <div>
+																																				<span class="font14 clearfix" style="display:block">
+
+													<i class="fb  fl">第一空：&nbsp;</i>
+													<div class="fl" style="width:905px;">
+                        								<p>键盘</p>
+                        							</div>
+													</span>
+																							                                        </div>
+                                    </div>
+									<!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					 <br>
+                            <div style="font-size:12pt" class="title"> 三、判断题</div>
+																																																																																																																						<br>
+																 							
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568666">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">1</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=25&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>图中的这两内圆，右边的那个内圆看起来更大些。属于艾宾豪斯错觉。</p>
+<p style="text-align:center"><img src="reVersionPaperPreview_files/c8f5ed2590f4e28c25667d489365cc95.png" style="white-space: normal;" data-original="https://p.ananas.chaoxing.com/star3/origin/c8f5ed2590f4e28c25667d489365cc95.png"></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									<!--判断题开始-->
+                                   <div class="Py_answer clearfix">
+																				<span>
+											我的答案：
+																							<i class="font20">×</i>
+																					</span>
+										                                    </div>
+									<!--判断题结束-->
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568667">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">2</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=26&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>在线文档相当于纸质文档，主要优势是在线文档的复制和发布比纸质文档便宜，版本升级时能够以电子方式被快速、低成本地更新。</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									<!--判断题开始-->
+                                   <div class="Py_answer clearfix">
+																				<span>
+											我的答案：
+																							<i class="font20">×</i>
+																					</span>
+										                                    </div>
+									<!--判断题结束-->
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568668">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">3</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=27&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体">卡通人物<span style="font-family: 宋体; font-size: 14px;">在游戏或儿童软件中已经获得了巨大成功，为了增进交互界面的趣味性，可以大力推广使用。</span></span></span></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									<!--判断题开始-->
+                                   <div class="Py_answer clearfix">
+																				<span>
+											我的答案：
+																							<i class="font20">×</i>
+																					</span>
+										                                    </div>
+									<!--判断题结束-->
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568669">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">4</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=28&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体">图中的这两段等长线，由于艾宾豪斯错觉的原因，下边的那个看起来更长些。</span></span></p>
+<p style="text-align:center"><img src="reVersionPaperPreview_files/bcda8099adda11d5de54bedfccbd7ad1.png" data-original="https://p.ananas.chaoxing.com/star3/origin/bcda8099adda11d5de54bedfccbd7ad1.png"></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									<!--判断题开始-->
+                                   <div class="Py_answer clearfix">
+																				<span>
+											我的答案：
+																							<i class="font20">×</i>
+																					</span>
+										                                    </div>
+									<!--判断题结束-->
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568670">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">5</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=29&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>&nbsp; &nbsp; &nbsp; &nbsp;很多软件开发项目都没有实现其目标，失败率甚至高达50 %，寻找其根源，主要是设计者的业务水平跟不上新技术的进步造成的。</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			   									<!--判断题开始-->
+                                   <div class="Py_answer clearfix">
+																				<span>
+											我的答案：
+																					</span>
+										                                    </div>
+									<!--判断题结束-->
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					 <br>
+                            <div style="font-size:12pt" class="title"> 四、简答题</div>
+																																																																																																																						<br>
+																 							
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568671">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">1</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=30&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>实现最佳用户体验的基本步骤是什么？</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568671">
+                                                                                                            <p>研
+究用户体验:要分析什么是用户重视的价值,什么是用户看重的可用性,同时还要分析用户的情绪如何受到外部的影响. 
+设计用户体验:在完成对用户、任务、环境、适用技术的分析之后,要设计为用户提供最佳体验的数字系统. 
+提升用户体验:不仅数字技术本身发展速度非常快,而且用户和使用环境也都在急剧变化.在这种情况下,需要正确认识在现有条件下,数字系 
+统的长期目标,根据这个目标,需要从人机交互观点对目前的数字产品或者服务所提供的用户体验级别进行评价,在评价的基础上,将系统朝着用户体验最终目标的
+方向改进</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568672">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">2</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=31&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>简述使用上下文帮助的好处，上下文帮助具体有哪些形式？</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568672">
+                                                                                                            <p>使
+用上下文帮助的好处: 
+上下文帮助是用户控制的交互对象帮助,它基于界面中的交互窗口部件.用户只需把光标移动到需要的位置且在该对象上悬停,就能导致一个小的弹出框(通常称为
+工具提示、屏幕提示或气球帮助)出现,其上有该对象的解释.这种形式的用户控制的交互对象帮助对用户来说是简单易懂的. 
+上下文帮助具体形式:工具提示、屏幕提示、气球帮助和智能帮助</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568673">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">3</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=32&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>用户可接受的等待计算机响应的时间究竟是多少比较合适，它取决于哪些因素？</p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568673">
+                                                                                                            <p>影
+响可接受响应时间的第一个因素,是人们基于以前完成给定任务所需时间的经验而建立起来的期望.如果任务完成得比期望的快,人们将感到满意;但如果任务完成
+得比期望的快得多,他们可能关注出了什么问题.同样,如果任务完成得比期望的慢得多,用户可能会沮丧. 
+影响响应时间期望的第二个因素是个人对延迟的容忍.新用户可能愿意等待的时值比有经验的用户要长得多.简而言之,个人考虑可接受等待时间的变化很大.这些
+变化受到转多因素的影响,诸如个性、费用、年龄、情绪、文化背景、时段、噪声和察觉到的完成工作的压力. 
+影响响应时间期望的其他因素是任务的复杂性和用户对任务的熟悉程度.对于简单的、重复的、需要很少的问题求解的任务,用户想要快速执行,超过十分之几秒的
+延迟,用户也会气恼.对于复杂的问题,甚至响应时间变长,用户通常也将执行得很好,因为他们能利用延迟来事先计划.用户是高度自适应的,能够改变他们的工
+作风格以适应不同的响应时间</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568674">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">4</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=33&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>指点设备可用于完成哪几种类型的交互任务？<br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568674">
+                                                                                                            <p>1)
+选择:用户从一个项集合中选择. 2)位置:用户在一维、二维、三维或更高维的空间中选择点. 3)方向:用户在二维、三维或更高维的空间中选择方向. 
+4)路径:用户快速地执行一系列定位和定向操作. 5)量化:用户指定数值. 
+6)手势:用户通过发出简单的手势来指出要执行的动作,诸如向左(或右)滑动表示要往前(或后)翻页,或快速的来回移动表示要擦除. 
+7)文本:用户在二维空间中输入、移动和编辑文本</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					 <br>
+                            <div style="font-size:12pt" class="title"> 五、名词解释</div>
+																																																																																																																						<br>
+																 							
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568675">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">1</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=34&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style="font-family: 宋体; font-size: 14px;">参与式设计</span></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568675">
+                                                                                                            <p>参与式设计是指用户直接参与到所开展的协同设计之中</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568676">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">2</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=35&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style="font-family: 宋体; font-size: 14px;">直接操纵</span></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568676">
+                                                                                                            <p>直接操纵是指用光笔、鼠标、触摸屏或数据手套等坐标指点设备,直接从屏幕上获取形象化命令与数据的过程</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568677">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">3</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=36&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style=";font-family:宋体;font-size:14px"><span style="font-family:宋体">在线用户帮助社区</span></span></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568677">
+                                                                                                            <p>,</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568678">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">4</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=37&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p><span style="font-family: 宋体;font-size: 14px">&nbsp;<span style="font-family:宋体">场景开发</span></span></p>
+<p><br></p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568678">
+                                                                                                            <p>一种早期描述新系统的方式是编写使用场景.如果可能,把它们以戏剧的形式演示出来</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568679">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">5</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=38&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>扩展直接操纵</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568679">
+                                                                                                            
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					 <br>
+                            <div style="font-size:12pt" class="title"> 六、论述题</div>
+																																																																																																																						<br>
+																 							
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568680">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">1</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=39&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>从工业革命、工艺美术运动、新艺术运动到德意志制造联盟和包豪斯、再到流线型设计，谈谈设计风格的演进过程，如何使设计走上一条正确的道路？</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568680">
+                                                                                                            <p>工
+业革命: 机器批量生产代替手工生产,使产品形式单一,由简单的几何形态代替复杂的自然形态,无法给人以美感.不知道 
+如何在外形上表现美,也没建立新的美学观和设计理论,因此表现为形式与内容不和谐,造型和功能不统一; 
+工艺美术运动:试图建立起以手工业为主导的生产模式,提出了"美与技术结合'的原则,但是该运动将手工艺推向了工业化 
+的对立面,违背了历史的发展潮流,由此使设计走了弯路 ; 
+新艺术运动:以装饰设计风格为特征,由于刻意追求曲线美和装饰美,而没有把艺术因素的外在形式与事物的内在属性相统 
+一,导致产品的功能与形式相矛盾,使这一运动的发展趋向于形式化; 
+德意志制造联盟包豪斯:提倡自由创造,抛弃传统形式和附加装饰;尊重技术自身的规律和结构自身的逻辑;尽量发挥材料性 
+能在机器成形条件下对形式美的表达;强调"形式追随功能'的几何造型的单纯明快;使产品具有简单 
+的轮廓和流畅的外表,以便促进标准化的批量生产并兼顾到商业因素和经济性,强调产品必须是实用、 经济、美观的结合</p>
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+													<!--单选题开始-->
+																					
+																		
+
+
+							 <div class="CyBottom">
+                            <div class="TiMu position singleQuesId" data="882568681">
+								
+								                                <div class="Cy_TItle clearfix">
+									                                                                        <i class="fl">2</i>
+                                    <div class="fl clearfix" style="line-height: 35px; font-size: 14px;padding-right:15px;width:843px;color:#333">
+																				<a title="编辑" class="BIANJI fr" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=40&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1"></a>
+											                                    												<div style="width:820px" class="fl"><p>论述在对人机交互服务质量进行測平时，为什么要把计算机的响应时间和错误率作为重要的考核指标？</p></div>
+										
+									</div>
+																			    									    																		
+                                </div>
+																	
+																			       								    																	                                    <div class="Py_tk">
+                                        <p class="font14">我的答案</p>
+                                        <div>
+                                            <span class="font14">
+																								<div class="clearfix" id="answer882568681">
+                                                                                                            
+                                                                        							</div>
+											</span>
+                                        </div>
+                                    </div>
+                                    <!--暂时隐藏
+                                    <div class="Py_yc font14 clearfix">
+                                    	<i class="fr marTopleft you">优</i>
+                                        <i class="fr marTopleft liang">良</i>
+                                        <i class="fr marTopleft zhong">中</i>
+                                        <i class="fr marTopleft cha">差</i>
+                                       <span class="blue fr">错误率：20%</span>
+                                    </div>
+									-->
+
+								
+
+                            </div>
+							<!--单选题结束-->
+				    </div>
+						
+                     					<input type="hidden" id="jiandaId" value="882568671,882568672,882568673,882568674,882568675,882568676,882568677,882568678,882568679,882568680,882568681">
+
+    </div>
+
+		           
+
+	<div class="dtBtnLeft" style="top:0;right:1%;z-index:998;display:block">
+		        <h3>单选题</h3>
+
+        <div class="clearfix choose">
+											
+									                        <a href="javascript:;" data="1" data1="0" id="882568641">1</a>
+																								
+									                        <a href="javascript:;" data="2" data1="0" id="882568642">2</a>
+																								
+									                        <a href="javascript:;" data="3" data1="0" id="882568643">3</a>
+																								
+									                        <a href="javascript:;" data="4" data1="0" id="882568644">4</a>
+																								
+									                        <a href="javascript:;" data="5" data1="0" id="882568645">5</a>
+																								
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+							
+        </div>
+	        <h3>填空题</h3>
+
+        <div class="clearfix choose">
+											
+															
+															
+															
+															
+															
+									
+                        <a href="javascript:;" data="6" data1="2" id="882568646">1</a>
+																								
+									
+                        <a href="javascript:;" data="7" data1="2" id="882568647">2</a>
+																								
+									
+                        <a href="javascript:;" data="8" data1="2" id="882568648">3</a>
+																								
+									
+                        <a href="javascript:;" data="9" data1="2" id="882568649">4</a>
+																								
+									
+                        <a href="javascript:;" data="10" data1="2" id="882568650">5</a>
+																								
+									
+                        <a href="javascript:;" data="11" data1="2" id="882568651">6</a>
+																								
+									
+                        <a href="javascript:;" data="12" data1="2" id="882568652">7</a>
+																								
+									
+                        <a href="javascript:;" data="13" data1="2" id="882568653">8</a>
+																								
+									
+                        <a href="javascript:;" data="14" data1="2" id="882568654">9</a>
+																								
+									
+                        <a href="javascript:;" data="15" data1="2" id="882568655">10</a>
+																								
+									
+                        <a href="javascript:;" data="16" data1="2" id="882568656">11</a>
+																								
+									
+                        <a href="javascript:;" data="17" data1="2" id="882568657">12</a>
+																								
+									
+                        <a href="javascript:;" data="18" data1="2" id="882568658">13</a>
+																								
+									
+                        <a href="javascript:;" data="19" data1="2" id="882568659">14</a>
+																								
+									
+                        <a href="javascript:;" data="20" data1="2" id="882568660">15</a>
+																								
+									
+                        <a href="javascript:;" data="21" data1="2" id="882568661">16</a>
+																								
+									
+                        <a href="javascript:;" data="22" data1="2" id="882568662">17</a>
+																								
+									
+                        <a href="javascript:;" data="23" data1="2" id="882568663">18</a>
+																								
+									
+                        <a href="javascript:;" data="24" data1="2" id="882568664">19</a>
+																								
+									
+                        <a href="javascript:;" data="25" data1="2" id="882568665">20</a>
+																								
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+							
+        </div>
+	        <h3>判断题</h3>
+
+        <div class="clearfix choose">
+											
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+									                        <a href="javascript:;" data="26" data1="3" id="882568666">1</a>
+																								
+									                        <a href="javascript:;" data="27" data1="3" id="882568667">2</a>
+																								
+									                        <a href="javascript:;" data="28" data1="3" id="882568668">3</a>
+																								
+									                        <a href="javascript:;" data="29" data1="3" id="882568669">4</a>
+																								
+									                        <a href="javascript:;" data="30" data1="3" class="cur" id="882568670">5</a>
+																								
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+							
+        </div>
+	        <h3>简答题</h3>
+
+        <div class="clearfix choose">
+											
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+									                        <a href="javascript:;" data="31" data1="4" id="882568671">1</a>
+																								
+									                        <a href="javascript:;" data="32" data1="4" id="882568672">2</a>
+																								
+									                        <a href="javascript:;" data="33" data1="4" id="882568673">3</a>
+																								
+									                        <a href="javascript:;" data="34" data1="4" id="882568674">4</a>
+																								
+															
+															
+															
+															
+															
+															
+							
+        </div>
+	        <h3>名词解释</h3>
+
+        <div class="clearfix choose">
+											
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+									                        <a href="javascript:;" data="35" data1="5" id="882568675">1</a>
+																								
+									                        <a href="javascript:;" data="36" data1="5" id="882568676">2</a>
+																								
+									                        <a href="javascript:;" data="37" data1="5" id="882568677">3</a>
+																								
+									                        <a href="javascript:;" data="38" data1="5" id="882568678">4</a>
+																								
+									                        <a href="javascript:;" data="39" data1="5" class="cur" id="882568679">5</a>
+																								
+															
+							
+        </div>
+	        <h3>论述题</h3>
+
+        <div class="clearfix choose">
+											
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+															
+									                        <a href="javascript:;" data="40" data1="6" id="882568680">1</a>
+																								
+									                        <a href="javascript:;" data="41" data1="6" class="cur" id="882568681">2</a>
+																
+        </div>
+	
+    <input type="hidden" name="questionIds" id="questionIds" value="882568670,882568679,882568681,">
+    
+</div>
+
+
+	  	<div class="DtButton02 Btn_blue_02 fr" style="display:none;margin-top:10px;background:#aaabb3;z-index:998;top:0;right:32%;">答题卡</div>
+	
+</div>
+<!----左侧答题卡结束--->
+ <div class="AlertCon02" style="width:440px;height:212px;display:none;" id="AlertCon02">
+        <h3 class="clearfix"><a href="javascript:void(0)" class="closed02 fr" onclick="WAY.box.hide();$('#AlertCon02').css('display','none')"></a></h3>
+        <div class="con02">
+            <div class="yes">
+            	<i style="margin-left:48px;float:left"></i><span style="margin-right:38x;">注意，还有5分钟!</span>
+    			<p>3秒后自动跳转到测试页面</p>
+            </div>
+        </div>
+    </div>
+
+	<!--时间用完交卷弹框 -->
+    <div style="width:380px;height:213px;display:none;" class="AlertCon02" id="timeOverWin">
+    	<h3 class="clearfix"><a class="closed02 fr" href="javascript:void(0)" onclick="goExamList()"></a></h3>
+    	<div class="con03">
+			<div style="line-height:31px;text-align:left;">
+        	<p>作答时间耗尽，试卷已提交</p>
+        	<p>试卷领取时间：2022年05月24日16:18</p>
+        	<p>考试用时：<span class="consumeMinutes">110</span>分钟</p>
+			</div>
+            <div class="marTop30">
+            	<a class="bluebtn" href="javascript:void(0)" onclick="goExamList()">知道了</a>
+            </div>
+        </div>
+      </div>
+	
+    <!-- 考试确认提交框 -->
+	<!--
+    <div style="width:322px; height:146px; display:none;" class="AlertCon02" id="confirmWin">
+    	<h3 class="clearfix"><a class="closed02 fr" href="javascript:void(0)" onclick="WAY.box.hide();$('#confirmWin').css('display','none');" ></a></h3>
+    	<div class="con03">
+        	<p id="tipContent">确认提交？</p>
+            <div class="marTop30">
+            	<a class="bluebtn" href="javascript:void(0)" onclick="confirmSubTest();">确定</a>	
+            	<a class="btnGray_1 marleft10" href="javascript:void(0)" onclick="WAY.box.hide();$('#confirmWin').css('display','none');">取消</a>
+            </div>
+        </div>
+    </div>
+	-->
+	
+	<!--时间未到，不能提交试卷-->
+	<div class="AlertCon02" style="width:322px; height:146px;display:none;" id="noSubmitLimitTimeWin">
+        <h3 class="clearfix"><a href="javascript:void(0)" class="closed02 fr" onclick="WAY.box.hide();$('#noSubmitLimitTimeWin').css('display','none')"></a></h3>
+        <div class="con03">
+    		<p id="noSubmitLimitTime">您还不能交卷</p>
+			<div class="marTop30">
+            	<a class="bluebtn" href="javascript:void(0)" onclick="WAY.box.hide();$('#noSubmitLimitTimeWin').css('display','none')">确定</a>
+            </div>
+        </div>
+    </div>
+	
+	<!-- 考试提交提示框 -->
+    <div style="width:332px;height:157px;display:none;" class="AlertCon02" id="handleWin">
+    	<h3 class="clearfix">
+					
+		</h3>
+    	<div class="con03" style="font-size:18px;padding:50px;">
+        	<p>系统正在处理，请耐心等待</p>
+			<span id="subTip">120</span><span style="font-size:12px;"> . . .</span>
+        </div>
+    </div>
+	
+	<!--音频播放次数限制提示框-->
+	<div class="AlertCon02" style="width:400px; height:200px;display:none;" id="audioLimitTimesWin">
+        <h3 class="clearfix"><a href="javascript:void(0)" class="closed02 fr" onclick="WAY.box.hide();$('#audioLimitTimesWin').css('display','none')" style="margin-top:1px;"></a></h3>
+        <div class="con03">
+    		<p class="audioLimitTimesTip" style="margin-top:16px;text-align:left;">此附件仅支持打开 <span></span> 次，你已打开 <span></span> 次，不能再次打开</p>
+			<div style="margin-top:60px;">
+            	<a class="bluebtn" href="javascript:void(0)" onclick="WAY.box.hide();$('#audioLimitTimesWin').css('display','none')">知道了</a>
+            </div>
+        </div>
+    </div>
+	
+	
+	<!--交卷成功 提示框-->
+	 <div class="lttpss-fix" style="display:none;" id="submitSuccessTipWin">
+        <div class="lttpss-fixcenter4">
+          <p class="l_ttp4"><img src="reVersionPaperPreview_files/l_sure.png">交卷成功</p>
+        </div>
+  </div>
+  
+  	<!-- 考试已经提交提示框 -->
+      <div style="width:300px;height:149px;display:none;" class="AlertCon02" id="submitedWin">
+    	<h3 class="clearfix"></h3>
+    	<div class="con03" style="top: 12%;position: relative;">
+        	<p class="l_ttp4"><img src="reVersionPaperPreview_files/l_sure.png">考试已经提交，正在跳转...</p>
+        </div>
+    </div>
+	
+	<!--时间未到，不能提交试卷-->
+	<div class="AlertCon02" style="width: 285px; height: 145px;display:none;" id="saveSuccess">
+        <h3 class="clearfix"><a href="javascript:void(0)" class="closed02 fr" onclick="WAY.box.hide();$('#saveSuccess').css('display','none')"></a></h3>
+        <div class="con03">
+    		<p>保存成功</p>
+			<div class="marTop30">
+            	<a class="bluebtn" href="javascript:void(0)" onclick="WAY.box.hide();$('#saveSuccess').css('display','none')">确定</a>
+            </div>
+        </div>
+    </div>
+	  <div style="height:60px;width:100%;position:fixed;top:0;left:0;z-index:995">
+  	<div style="background:#fff;width:1000px;margin:0 auto;height:60px;opacity:0.8;z-index:996"></div>
+    <div style="position:relative;width:1000px;margin:0 auto;z-index:997;margin-top:-60px;text-align:center">
+	  	<a onclick="submitForm(false,false);" href="javascript:;" class="Btn_blue_02 fl" style="margin-top:10px;position:absolute">确定交卷</a>
+			  	        <p class="Reback" style="position:absolute;left:40px;top:0;"><i></i>
+			<a title="返回" href="https://mooc1-2.chaoxing.com/exam/test/reVersionTestStartNew?courseId=216833003&amp;classId=52989215&amp;tId=2131281&amp;id=60585684&amp;p=1&amp;start=40&amp;preViewToEdit=true&amp;remainTimeParam=5339&amp;relationAnswerLastUpdateTime=1653381587327&amp;enc=1d3a6fce74fd6350c1422a6636b107c0&amp;examsystem=0&amp;cpi=151066331&amp;openc=8550fb279d95904bc382b4179a261f9b&amp;qbanksystem=0&amp;qbankbackurl=&amp;monitorStatus=0&amp;monitorOp=-1" class="RebackA ">返回</a>
+		</p>
+	</div>
+  </div>
+  
+   		 <!-- 考试多终端提示框 -->
+    <div style="width:400px;height:230px; display:none;" class="AlertCon02" id="multiTerminalWin">
+    	<div class="con03">
+        	<p class="tipContent" style="position:relative;top:20px;text-align:left;line-height: 25px;"></p>
+            <div style="top:70px;position: relative;">
+            	<a class="btnGray_1 marleft10 cancel" style="margin-right:26px;color:#7b9e31;background: white;border:1px solid #7b9e31;width:50px;" href="javascript:void(0)" onclick="WAY.box.hide();$('#multiTerminalWin').css('display','none');">取消</a>
+				<a class="bluebtn confirm" href="javascript:void(0)" onclick="">重新进入</a>	
+            </div>
+        </div>
+    </div>
+	 <!-- 考试设置单题限时提示框 -->
+    <div style="width:322px;height:160px; display:none;" class="AlertCon02" id="singleQuesLimitTimeWin">
+    	<div class="con03">
+        	<p class="tipContent" style="position:relative;top:20px;text-align:center;line-height: 25px;"> 本题作答时间已用完，将进入下一题 </p>
+            <div style="top:70px;position: relative;">
+				<a class="bluebtn confirm" href="javascript:void(0)" style="width:50px;" onclick="singleQuesLimitTimeConfirm();"> 确定 </a>	
+            </div>
+        </div>
+    </div>
+		
+	  <!-- 考试确认提交框 -->
+    	<div style="width:322px; height:146px; display:none;" class="AlertCon02" id="confirmWin">
+        	<h3 class="clearfix"><a class="closed02 fr" href="javascript:void(0)" onclick="WAY.box.hide();$('#confirmWin').css('display','none');"></a></h3>
+        	<div class="con03">
+            	<p id="tipContent">确认提交？</p>
+                <div class="marTop30">
+                	<a class="bluebtn" href="javascript:void(0)" onclick="confirmSubTest();">确定</a>	
+                	<a class="btnGray_1 marleft10" href="javascript:void(0)" onclick="WAY.box.hide();$('#confirmWin').css('display','none');">取消</a>
+                </div>
+            </div>
+        </div>
+		<!-- 返回顶部 -->
+	<style>
+	#top {
+    border: 1px solid lightgrey;
+    bottom: 78px;
+    font-size: 15px;
+    height: 40px;
+    line-height: 40px;
+    position: fixed;
+    right: 10px;
+    text-align: center;
+    width: 76px;
+}
+a {
+    color: #474747;
+    text-decoration: none;
+}
+    </style>
+<script type="text/javascript">
+			(function() {
+				var backToTopTxt = "返回顶部", backToTopEle = $('<a id="top" target="_self" href="javascript:scroll(0,0)"  title="返回顶部">返回顶部</a>').appendTo($("body"))
+					.attr("title", backToTopTxt).click(function() {
+						$("html, body").animate({ scrollTop: 0 }, 520);
+				}), backToTopFun = function() {
+					var st = $(document).scrollTop(), winh = $(window).height();
+					(st > 0)? backToTopEle.show(): backToTopEle.hide();    
+					//IE6下的定位
+					if (!window.XMLHttpRequest) {
+						backToTopEle.css("top", st + winh - 60);    
+					}
+				};
+				$(window).bind("scroll", backToTopFun);
+				$(function() { backToTopFun(); });
+			})();
+		</script><a id="top" target="_self" href="javascript:scroll(0,0)" title="返回顶部" style="display: none;">返回顶部</a>
+<script>
+ $(document).ready(function () {
+	var snapshotMonitor = $('#snapshotMonitor').val();
+	if (snapshotMonitor == 1) {
+	    openExamClientFaceMonitor('-1', '0', '{"classId":"52989215", "answerId":"60585684"}') ;
+	}
+	var pcclientSwitchout = $('#pcclientSwitchout').val();
+	if(pcclientSwitchout == 1){
+	    openExamClientScreenCutting();
+	}
+});
+
+ $(document).bind("visibilitychange",function(e){
+      checkRemainTime(document.visibilityState);
+  });
+</script>
+
+</body></html>
